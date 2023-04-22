@@ -11,11 +11,10 @@ export default async function handler(req,res){
             return res.status(400).json("Url is not provided");
         }
         await connectMongo();
-        const newUrl = await Urls.create({
+        return await Urls.create({
             url:req.body.url,
             //specify owner by ip
         });
-        return newUrl;
     }
     return res.status(404);
 }
