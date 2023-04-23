@@ -36,7 +36,7 @@ export default function Home() {
             });
         const content = await response.json()
         if(content){
-            setData(content, ...data);
+            setData([content, ...data]);
         }
     };
 
@@ -99,4 +99,4 @@ export default function Home() {
         </main>
     </>
   )
-}
+}//TODO:different path
