@@ -5,7 +5,7 @@ const UrlSchema = new Schema({
     code:{
         type:String,
         unique:true,
-        default:nanoid()
+        default:nanoid(8)
     },
     url:{type:String, require:true},
     clicked:{type:Number, default: 0},

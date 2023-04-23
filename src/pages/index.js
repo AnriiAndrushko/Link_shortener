@@ -6,11 +6,28 @@ import React, {useEffect, useState} from "react";
 
 const inter = Inter({ subsets: ['latin'] })
 
+
+async function getIP() {
+    const response = await fetch('https://geolocation-db.com/json/');
+    const data = await response.json();
+    return data.IPv4;
+}
+
 export default function Home({urlList}) {
     const [data,setData] = useState(urlList);
     const [newUrl, setNewUrl] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    let userIP = "All";
 
+    useEffect(()=>{
+        setIsLoading(true);
+        const gettingIP = async ()=>{
+            userIP = await getIP();
+        }
+        gettingIP().finally(()=>{
+            setIsLoading(false);
+        })
+    },[])
 
     const handleOnSubmit = async (e)=> {
         e.preventDefault();
@@ -22,11 +39,11 @@ export default function Home({urlList}) {
             headers:{
                 "content-type":"application/json"
             },
-            body:JSON.stringify({url:_newUrl})
+            body:JSON.stringify({url:_newUrl, userIP:await getIP(),}),
             });
         const content = await response.json()
         if(content){
-            setData([content, ...data]);
+            setData([...data, content]);
         }
     };
 
@@ -68,7 +85,9 @@ export default function Home({urlList}) {
                                         </a>
                                     }</td>
                                     <td>
-                                        <a target="_blank" href={`/api/${urlObject.code}`}>
+                                        <a target="_blank" href={`/api/${urlObject.code}`} onClick={()=> {
+                                            data[data.findIndex(el=>el.code===urlObject.code)].clicked++;
+                                            setData([...data])}}>
                                             {urlObject.code}
                                         </a>
                                     </td>

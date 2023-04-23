@@ -1,5 +1,9 @@
 import connectMongo from "../../../utils/connectMongo";
 import Urls from "../../../models/urls";
+import {nanoid} from "nanoid";
+
+
+
 
 export default async function handler(req,res){
     if(req.method === "GET"){
@@ -12,10 +16,12 @@ export default async function handler(req,res){
         }
         await connectMongo();
         const newUrl = await Urls.create({
+            code: nanoid(8),
             url:req.body.url,
-            //specify owner by ip
+            owner: req.body.userIP,
         });
         return res.status(201).json(newUrl);
     }
     return res.status(404);
 }
+
