@@ -60,7 +60,8 @@ export default function Home({urlList}) {
         }
     };
 
-  return (
+
+    return (
     <>
         <main>
             <div>
@@ -109,6 +110,22 @@ export default function Home({urlList}) {
                                     </td>
                                     <td>
                                         {urlObject.clicked}
+                                    </td>
+                                    <td>
+                                        <button onClick={async ()=>{
+                                            //e.preventDefault();
+
+                                            const  response = await fetch(`/api/${urlObject.code}`,{
+                                            method:"DELETE",
+                                            headers:{
+                                            "content-type":"application/json"
+                                        },
+                                        });
+                                            if(response.status===200){
+                                                setData([...data.filter(d=>d.code!==urlObject.code)]);
+                                            }
+                                        }
+                                        }>Delete</button>
                                     </td>
 
                                 </tr>
