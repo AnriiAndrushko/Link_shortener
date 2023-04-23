@@ -27,14 +27,11 @@ export default function Home({urlList}) {
             return ip;
         }
         gettingIP().then((ip)=>{
-            return fetch("/api/url",{
+            return fetch("/api/url?userIP="+userIP.current,{
             method:"GET",
             headers:{
                 "content-type":"application/json",
-                //,
-                "X-Forwarded-For" : JSON.stringify(userIP.current),
             },
-            //body:JSON.stringify({userIP:userIP,}),
         })
         }).then(res=> res.json()).then(res=>{
 

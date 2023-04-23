@@ -4,10 +4,9 @@ import {nanoid} from "nanoid";
 
 
 
-
 export default async function handler(req,res){
     if(req.method === "GET"){
-        let userIP = req.headers["x-forwarded-for"].split(',')[0].replaceAll('"','');
+        let userIP = req.query.userIP;
         await connectMongo();
         const urlList = await  Urls.find({owner : { $in: [userIP, 'All']}});
         return res.status(200).json(urlList);

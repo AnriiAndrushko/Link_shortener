@@ -7,7 +7,6 @@ export default async function handler(req,res){
     }
     await connectMongo();
     const data = await Urls.findOne(req.query);
-    console.log(data);
     if(data){
         data.clicked++;
         data.save();
