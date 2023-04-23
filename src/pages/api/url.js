@@ -5,7 +5,7 @@ export default async function handler(req,res){
     if(req.method === "GET"){
         await connectMongo();
         const urlList = await  Urls.find();
-        return res.status(200).json(urlList );
+        return res.status(200).json(urlList);
     }else if(req.method === "POST"){
         if(!req.body.url){
             return res.status(400).json("Url is not provided");

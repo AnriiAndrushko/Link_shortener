@@ -6,20 +6,10 @@ import React, {useEffect, useState} from "react";
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function Home() {
-    const [data,setData] = useState([]);
+export default function Home({urlList}) {
+    const [data,setData] = useState(urlList);
     const [newUrl, setNewUrl] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-
-    //on load
-    useEffect(()=>{
-        setIsLoading(true);
-        fetch("/api/url").then(res=>res.json()).then(data=>{
-            setData(data);
-            console.log(data);//TODO: clear debug
-            setIsLoading(false);
-        })
-    },[]);
 
 
     const handleOnSubmit = async (e)=> {
@@ -98,5 +88,18 @@ export default function Home() {
             </div>
         </main>
     </>
-  )
+  );
 }//TODO:different path
+
+export async function  getServerSideProps(context){
+    const res = await fetch("http://localhost:3000/api/url");
+    const urlList = await res.json();
+    return{
+        props:{
+            urlList,
+        },
+    };
+}
+
+
+
