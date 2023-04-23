@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,16 +17,32 @@ export default function Home({urlList}) {
     const [data,setData] = useState(urlList);
     const [newUrl, setNewUrl] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    let userIP = "All";
+    let userIP = useRef("All");
 
     useEffect(()=>{
         setIsLoading(true);
         const gettingIP = async ()=>{
-            userIP = await getIP();
+            let ip = await getIP();
+            userIP.current = ip;
+            return ip;
         }
-        gettingIP().finally(()=>{
-            setIsLoading(false);
+        gettingIP().then((ip)=>{
+            return fetch("/api/url",{
+            method:"GET",
+            headers:{
+                "content-type":"application/json",
+                //,
+                "X-Forwarded-For" : JSON.stringify(userIP.current),
+            },
+            //body:JSON.stringify({userIP:userIP,}),
         })
+        }).then(res=> res.json()).then(res=>{
+
+            setData(res);
+
+        }).finally(()=>{
+            setIsLoading(false);
+        });
     },[])
 
     const handleOnSubmit = async (e)=> {
@@ -110,8 +126,16 @@ export default function Home({urlList}) {
   );
 }//TODO:different path
 
+
+//To prerender page on server, actually useless in my case. It's just for search engines.
 export async function  getServerSideProps(context){
-    const res = await fetch("http://localhost:3000/api/url");
+    const res = await fetch("http://localhost:3000/api/url",{
+        method:"GET",
+        headers:{
+            "content-type":"application/json"
+        },
+        query:JSON.stringify({userIP:await getIP(),}),
+    });
     const urlList = await res.json();
     return{
         props:{
