@@ -1,11 +1,10 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from '@/styles/Home.module.css'
+//import Head from 'next/head'
+//import Image from 'next/image'
+//import { Inter } from 'next/font/google'
+import styles from '@/styles/inputForm.module.css'
 import React, {useEffect, useRef, useState} from "react";
-
-const inter = Inter({ subsets: ['latin'] })
-
+//const inter = Inter({ subsets: ['latin'] })
+//import InputForm from '../../modules/inputForm'
 
 async function getIP() {
     const response = await fetch('https://geolocation-db.com/json/');
@@ -67,11 +66,12 @@ export default function Home({urlList}) {
             <div>
                 <h2>Url Shortener</h2>
                 <form onSubmit={handleOnSubmit}>
-                    <input type="text"
-                    placeholder="Enter your url..."
-                    value={newUrl}
-                    onChange={(e)=>setNewUrl(e.target.value)}
-                    />
+                    <div className={styles.group}>
+                        <input type="text" required value={newUrl} onChange={(e)=>setNewUrl(e.target.value)}/>
+                        <span className="highlight"></span>
+                        <span className="bar"></span>
+                        <label>Enter your url</label>
+                    </div>
                     <button type="submit">
                         Create Short Url
                     </button>

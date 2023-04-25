@@ -10,7 +10,7 @@ export default async function handler(req,res){
             data.save();
             return res.redirect(data.url);
         } else {
-            return res.status(404);
+            return res.status(404).json("Incorrect url");
         }
     }else if(req.method==="DELETE"){
         await connectMongo();
