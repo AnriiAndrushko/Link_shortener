@@ -18,8 +18,7 @@ export default async function handler(req,res){
     }else if(req.method==="DELETE"){
         await connectMongo();
         const result = await Urls(tableName).deleteOne({code:code});
-
-        if (result.acknowledged) {
+        if (result.deletedCount===1) {
             return res.status(200).json("Deleted successfully");
         } else {
             return res.status(404);
