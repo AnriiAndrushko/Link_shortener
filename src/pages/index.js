@@ -3,24 +3,43 @@
 //import { Inter } from 'next/font/google'
 import styles from '@/styles/inputForm.module.css'
 import React, {useEffect, useRef, useState} from "react";
+import connectMongo from "../../utils/connectMongo";
+import Urls from "../../models/urls";
 //const inter = Inter({ subsets: ['latin'] })
 //import InputForm from '../../modules/inputForm'
 
 async function getIP() {
-    let data;
-    try {
-        const response = await fetch('https://geolocation-db.com/json/');
-        data = await response.json();
-    }catch (err){
-        console.log(err);
+
+    if(!process.env.NODE_ENV || process.env.NODE_ENV === 'development'){    //This used to test on dev server and not run build every time
+        let data;
+        try {
+            const response = await fetch('https://geolocation-db.com/json/');
+            data = await response.json();
+        }catch (err){
+            console.log(err);
+        }
+        return data?data.IPv4:"All";
+    }else{
+        let ip;
+        try {
+            const response = await fetch("/api/getIP",{
+                method:"GET",
+                headers:{
+                    "content-type":"application/json",
+                },
+            });
+            ip = await response.json()
+        }catch (err){
+            console.log(err);
+        }
+        return ip?ip:"All";
     }
-    return data.IPv4?data.IPv4:"All";
 }
 
 export default function Home({urlList}) {
     const [data,setData] = useState(urlList);
     const [newUrl, setNewUrl] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);//currently not used, for future
     let userIP = useRef("All");
 
     useEffect(()=>{
@@ -30,7 +49,7 @@ export default function Home({urlList}) {
             userIP.current = ip;
             return ip;
         }
-        gettingIP().then((ip)=>{
+        gettingIP().then(()=>{
             return fetch("/api/url?userIP="+userIP.current,{
             method:"GET",
             headers:{
@@ -70,6 +89,7 @@ export default function Home({urlList}) {
         <main>
             <div>
                 <h2>Url Shortener</h2>
+                <h3>Your IP: {userIP.current}</h3>
                 <form onSubmit={handleOnSubmit}>
                     <div className={styles.group}>
                         <input type="text" required value={newUrl} onChange={(e)=>setNewUrl(e.target.value)}/>
@@ -145,17 +165,11 @@ export default function Home({urlList}) {
   );
 }//TODO:different path
 
-
 //To prerender page on server, actually useless in my case. It's just for search engines.
 export async function  getServerSideProps(context){
-    const res = await fetch("http://localhost:3000/api/url",{
-        method:"GET",
-        headers:{
-            "content-type":"application/json"
-        },
-        query:JSON.stringify({userIP:await getIP(),}),
-    });
-    const urlList = await res.json();
+    await connectMongo();
+    let urlList = await Urls.find({owner: 'All'});
+    urlList= JSON.parse(JSON.stringify(urlList));//weird but works :/
     return{
         props:{
             urlList,
