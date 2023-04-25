@@ -1,10 +1,13 @@
-import Urls from "../../../models/urls";
-import connectMongo from "../../../utils/connectMongo";
+import Urls from "../../../../models/urls";
+import connectMongo from "../../../../utils/connectMongo";
+import { useRouter } from 'next/router';
 
 export default async function handler(req,res){
+    const { code, tableName } = req.query;
+
     if(req.method==="GET") {
         await connectMongo();
-        const data = await Urls.findOne(req.query);
+        const data = await Urls(tableName).findOne({code:code});
         if (data) {
             data.clicked++;
             data.save();
@@ -14,7 +17,7 @@ export default async function handler(req,res){
         }
     }else if(req.method==="DELETE"){
         await connectMongo();
-        const result = await Urls.deleteOne(req.query);
+        const result = await Urls(tableName).deleteOne({code:code});
 
         if (result.acknowledged) {
             return res.status(200).json("Deleted successfully");

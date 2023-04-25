@@ -12,6 +12,13 @@ const UrlSchema = new Schema({
     owner:{type:String, default:"All"}
 });
 
-const Urls = models.Urls||model("Urls", UrlSchema);
+const schemes = {};
+
+const Urls = (tableName)=> {
+    if(schemes[tableName]!==undefined){
+        schemes[tableName] = model(tableName, UrlSchema);
+    }
+    return models[tableName];
+}
 
 export default Urls;
