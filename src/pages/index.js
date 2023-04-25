@@ -7,9 +7,14 @@ import React, {useEffect, useRef, useState} from "react";
 //import InputForm from '../../modules/inputForm'
 
 async function getIP() {
-    const response = await fetch('https://geolocation-db.com/json/');
-    const data = await response.json();
-    return data.IPv4;
+    let data;
+    try {
+        const response = await fetch('https://geolocation-db.com/json/');
+        data = await response.json();
+    }catch (err){
+        console.log(err);
+    }
+    return data.IPv4?data.IPv4:"All";
 }
 
 export default function Home({urlList}) {
