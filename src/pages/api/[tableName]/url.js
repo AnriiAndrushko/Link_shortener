@@ -3,7 +3,6 @@ import Urls from "../../../../models/urls";
 import {nanoid} from "nanoid";
 
 
-
 export default async function handler(req,res){
     const { tableName } = req.query;
     if(req.method === "GET"){

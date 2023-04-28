@@ -6,13 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "test": "jest"
+    "lint": "next lint"
   },
   "dependencies": {
     "eslint": "8.38.0",
     "eslint-config-next": "13.3.0",
-    "jest": "^29.5.0",
     "mongoose": "^7.0.4",
     "nanoid": "^4.0.2",
     "next": "13.3.0",

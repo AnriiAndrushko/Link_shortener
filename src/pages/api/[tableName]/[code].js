@@ -1,6 +1,7 @@
 import Urls from "../../../../models/urls";
 import connectMongo from "../../../../utils/connectMongo";
 
+
 export default async function handler(req,res){
     const { code, tableName } = req.query;
 
