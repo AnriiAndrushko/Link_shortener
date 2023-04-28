@@ -101,7 +101,7 @@ export default function Home({urlList}) {
 
                 <form onSubmit={handleOnSubmit}>
                     <div className={styles.group}>
-                        <input type="text" required value={newUrl} onChange={(e)=>{setNewUrl(e.target.value);}}/>
+                        <input pattern="https://.*" type="url" required value={newUrl} onChange={(e)=>{setNewUrl(e.target.value);}}/>
                         <span className="highlight"></span>
                         <span className="bar"></span>
                         <label>Enter your url</label>
@@ -170,7 +170,7 @@ export default function Home({urlList}) {
         </main>
     </>
   );
-}//TODO:different path
+}
 
 //To prerender page on server, actually useless in my case. It's just for search engines.
 export async function  getServerSideProps(context){

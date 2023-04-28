@@ -12,11 +12,9 @@ const UrlSchema = new Schema({
     owner:{type:String, default:"All"}
 });
 
-const schemes = {};
-
 const Urls = (tableName)=> {
-    if(schemes[tableName]!==undefined){
-        schemes[tableName] = model(tableName, UrlSchema);
+    if(models[tableName]===undefined){
+        return  model(tableName, UrlSchema);
     }
     return models[tableName];
 }
