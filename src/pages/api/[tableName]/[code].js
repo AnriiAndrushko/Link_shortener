@@ -1,6 +1,5 @@
 import Urls from "../../../../models/urls";
 import connectMongo from "../../../../utils/connectMongo";
-import { useRouter } from 'next/router';
 
 export default async function handler(req,res){
     const { code, tableName } = req.query;
