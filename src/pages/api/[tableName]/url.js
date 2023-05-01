@@ -3,7 +3,7 @@ import Urls from "../../../../models/urls";
 import {nanoid} from "nanoid";
 
 
-export default async function handler(req,res){
+async function handler(req,res){
     const { tableName } = req.query;
     if(req.method === "GET"){
         let userIP = req.query.userIP;
@@ -26,3 +26,5 @@ export default async function handler(req,res){
 }
 
 //insecure because no login system so can pass any ip
+
+export default handler;

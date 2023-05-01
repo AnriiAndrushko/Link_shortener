@@ -1,8 +1,8 @@
 import Urls from "../../../../models/urls";
 import connectMongo from "../../../../utils/connectMongo";
 
+async function handler(req,res){
 
-export default async function handler(req,res){
     const { code, tableName } = req.query;
 
     if(req.method==="GET") {
@@ -26,3 +26,5 @@ export default async function handler(req,res){
     }
     return res.status(400);
 }
+
+export default handler;

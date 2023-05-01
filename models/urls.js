@@ -1,6 +1,6 @@
 import {nanoid} from "nanoid";
 
-const {Schema, models, model} = require("mongoose");
+import {Schema, models, model} from "mongoose";
 
 const UrlSchema = new Schema({
     code:{
